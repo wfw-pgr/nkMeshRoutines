@@ -19,7 +19,7 @@ def mount__meshQuality( mshFile=None, inpFile=None, outFile="dat/mesh_quality.vt
     # ------------------------------------------------- #
     # --- [2] load mesh File / quality Data         --- #
     # ------------------------------------------------- #
-    import load__nastranFile as inf
+    import nkMeshRoutines.load__nastranFile as inf
     nodes, elems = inf.load__nastranFile( inpFile=mshFile )
     matNums      = elems[:,mat_]
     elems        = elems[:,nd1_:nd4_+1] - 1
