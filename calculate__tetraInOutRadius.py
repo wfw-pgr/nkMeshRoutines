@@ -45,7 +45,10 @@ def calculate__tetraInOutRadius( elems=None, nodes=None ):
                                       norm_sub3[:,None], ], axis=1 )
     try:
         inv       = np.linalg.inv( matrix )
-    except numpy.linalg.LinAlgError:
+    except np.linalg.LinAlgError:
+        print( "[calculate__tetraInOutRadius.py] [WARNING]  raise LinAlgError, 'Singular matrix' " )
+        print( "[calculate__tetraInOutRadius.py] [WARNING]  the matrix is singular = negative volume ??" )
+        print( "[calculate__tetraInOutRadius.py] [WARNING]  psuedo inversion of the matrix is used..." )
         inv       = np.linalg.pinv( matrix )     #  psuedo-invert matrix
     centers       = 0.5 * np.matmul( inv, bvector[:,:,None] )
     centers       = np.reshape( centers, ( nElems, 3 ) )
