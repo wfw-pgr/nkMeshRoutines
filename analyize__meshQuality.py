@@ -9,7 +9,7 @@ import nkUtilities.load__config as lcf
 
 def analyze__meshQuality( indicator="rho", inpFile="dat/mesh_quality.dat", \
                           mshFile  =None , pngFile="png/mesh_quality.png", \
-                          DataRange=(0.,1.), nBins=50 ):
+                          DataRange=None , nBins=50, normalize=True,  ):
 
     # ------------------------------------------------- #
     # --- [1] Arguments                             --- #
@@ -34,11 +34,15 @@ def analyze__meshQuality( indicator="rho", inpFile="dat/mesh_quality.dat", \
     idx          = item_table[indicator]
     Data         = np.ravel( Data[:,idx] )
 
+    if ( DataRange is None ):
+        dmin, dmax = np.min( Data ), np.max( Data )
+    
     # ------------------------------------------------- #
     # --- [4] make histogram                        --- #
     # ------------------------------------------------- #
     ret,bins = np.histogram( Data, bins=nBins, range=DataRange )
-    ret      = ret / np.sum( ret )
+    if ( normalize ):
+        ret  = ret / np.sum( ret )
     bins     = ( 0.5 * ( bins + np.roll( bins, +1 ) ) )[1:]
     xTitle   = title_table[indicator]
     
@@ -59,5 +63,7 @@ def analyze__meshQuality( indicator="rho", inpFile="dat/mesh_quality.dat", \
 
 if ( __name__=="__main__" ):
 
-    mshFile = "msh/model.bdf"
-    analyze__meshQuality( mshFile=mshFile )
+    mshFile = "test/model.bdf"
+    pngFile = "test/mesh_quality.png"
+    datFile = "test/mesh_quality.dat"
+    analyze__meshQuality( mshFile=mshFile, pngFile=pngFile, inpFile=datFile )
