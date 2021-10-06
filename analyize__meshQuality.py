@@ -42,13 +42,16 @@ def analyze__meshQuality( indicator="rho", inpFile="dat/mesh_quality.dat", \
     # ------------------------------------------------- #
     ret,bins = np.histogram( Data, bins=nBins, range=DataRange )
     if ( normalize ):
-        ret  = ret / np.sum( ret )
+        ret    = ret / np.sum( ret )
+        yTitle = "Normalized Frequency"
+    else:
+        yTitle = "Frequency"
     bins     = ( 0.5 * ( bins + np.roll( bins, +1 ) ) )[1:]
     xTitle   = title_table[indicator]
     
     config           = lcf.load__config()
     config["xTitle"] = xTitle
-    config["yTitle"] = "Normalized Frequency"
+    config["yTitle"] = yTitle
     
     fig    = pl1.plot1D( config=config, pngFile=pngFile )
     fig.add__bar( xAxis=bins, yAxis=ret )
