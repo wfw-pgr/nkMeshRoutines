@@ -1,6 +1,5 @@
 import numpy as np
 import os, sys
-import gmsh
 
 # ========================================================= #
 # ===  load nastran File                                === #
