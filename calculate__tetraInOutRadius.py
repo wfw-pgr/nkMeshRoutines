@@ -43,7 +43,11 @@ def calculate__tetraInOutRadius( elems=None, nodes=None ):
     norm_sub3     = np.sum(nd2**2,axis=1) - np.sum(nd3**2,axis=1)
     bvector       = np.concatenate( [ norm_sub1[:,None], norm_sub2[:,None], \
                                       norm_sub3[:,None], ], axis=1 )
-    centers       = 0.5 * np.matmul( np.linalg.inv( matrix ), bvector[:,:,None] )
+    try:
+        inv       = np.linalg.inv( matrix )
+    except numpy.linalg.LinAlgError:
+        inv       = np.linalg.pinv( matrix )     #  psuedo-invert matrix
+    centers       = 0.5 * np.matmul( inv, bvector[:,:,None] )
     centers       = np.reshape( centers, ( nElems, 3 ) )
     rout          = np.linalg.norm( nd0 - centers, axis=1 )
     
