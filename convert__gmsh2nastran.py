@@ -18,7 +18,7 @@ def convert__gmsh2nastran( inpFile=None, outFile=None ):
     # --- [2] load gmsh File                        --- #
     # ------------------------------------------------- #
     import nkMeshRoutines.load__meshio as lms
-    ret     = lms.load__meshio( mshFile=inpFile, returnType="dict" )
+    ret     = lms.load__meshio( mshFile=inpFile, returnType="dict", gmsh_physical=False )
     print( "[convert__gmsh2nastran.py] converting {0} ==> {1}".format( inpFile, outFile ) )
     points  = np.array( ret["points"] )
     cells   = np.array( ret["cells"]["tetra"] )
@@ -37,6 +37,6 @@ def convert__gmsh2nastran( inpFile=None, outFile=None ):
 # ========================================================= #
 
 if ( __name__=="__main__" ):
-    inpFile = "msh/model.msh"
-    outFile = "msh/out.bdf"
+    inpFile = "test/model.msh"
+    outFile = "test/converted.bdf"
     convert__gmsh2nastran( inpFile=inpFile, outFile=outFile )

@@ -7,25 +7,26 @@ import numpy as np
 # ===  load__meshio.py                                  === #
 # ========================================================= #
 
-def load__meshio( mshFile=None, elementType=None, returnType="dict", gmsh=None ):
+def load__meshio( mshFile=None, elementType=None, returnType="dict", gmsh_physical=True ):
+
+    #  -- elementType :: return only elementType: [ tetra, line, triangle, vertex, etc. ]
+    #  -- returnType  :: return Data Type :: [ dict, list, elem, physNum, etc. ]
 
     # ------------------------------------------------- #
     # --- [1] Arguments                             --- #
     # ------------------------------------------------- #
-    if ( mshFile        is None ): sys.exit( "[load__meshio.py] mshFile        == ???" )
+    if ( mshFile        is None ):
+        sys.exit( "[load__meshio.py] mshFile        == ???" )
     extension = ( mshFile.split( "." ) )[-1]
-    if ( gmsh is None ):
-        if ( extension.lower() == "msh" ):
-            gmsh = True
-        else:
-            gmsh = False
-    else:
-        gmsh = False
     
     # ------------------------------------------------- #
     # --- [2] Load mesh File                        --- #
     # ------------------------------------------------- #
-    print( "[load__meshio.py] loading {0} from meshIO....       ".format( mshFile ), end="" )
+    #  -- [2-1] Load mesh File using meshIO         --  #
+    print( "\n" + "-----------------------------------------------"*2 )
+    print( "[load__meshio.py] loading {0} from meshIO.... ".format( mshFile ) )
+    print( "-----------------------------------------------"*2 + "\n" )
+
     rmesh         = meshio.read( mshFile )
     cells         = rmesh.cells_dict
     cellData      = rmesh.cell_data_dict
@@ -36,20 +37,45 @@ def load__meshio( mshFile=None, elementType=None, returnType="dict", gmsh=None )
     pointDataType = list( pointData.keys() )
     physNums      = None
 
-    # ------------------------------------------------- #
-    # --- [3] fetch elementType data                --- #
-    # ------------------------------------------------- #
+    #  -- [2-2] number of cell counting             --  #
+    nCells = []
+    for ckey in cellType:
+        nCell     = ( cells[ckey] ).shape[0]
+        nCells   += [ nCell ]
+    
+    #  -- [2-3] extract certain elementType         --  #
     if ( elementType is not None ):
         if ( elementType in cellType ):
-            cells    = cells   [elementType]
+            cells    = cells[elementType]
             cellData = { key:cellData[key][elementType] for key in cellDataType }
-    if ( gmsh ):
-        physNums  = np.array( cellData["gmsh:physical"]["tetra"] )
+            nCells   = [ cells.shape[0] ]
+            cells_are_array = True
+
+    if ( ( gmsh_physical is True ) and ( "gmsh:physical" in cellDataType ) ):
+        physNums  = np.array( cellData["gmsh:physical"] )
     
+    print( "[load__meshio.py] loaded mshFile       ::   {0}".format( mshFile         ) )
+    print( "[load__meshio.py] elementType          ::   {0}".format( elementType     ) )
+    print( "[load__meshio.py] loaded points        ::   {0}".format( points.shape[0] ) )
+    print( "[load__meshio.py] loaded cells         ::   {0}".format( nCells          ) )
+    if ( ( gmsh_physical ) and ( "gmsh:physical" in cellDataType ) ):
+        print( "[load__meshio.py] gmsh:physical Found  ::   {0}".format( physNums    ) )
+    else:
+        print( "[load__meshio.py] NO gmsh:physical     ::   {0}".format( physNums    ) )
+        
+    print( "[load__meshio.py] loaded cellType      :: [ {0} ]"\
+           .format( ", ".join( cellType      ) ) )
+    print( "[load__meshio.py] loaded cellDataType  :: [ {0} ]"\
+           .format( ", ".join( cellDataType  ) ) )
+    print( "[load__meshio.py] loaded pointDataType :: [ {0} ]"\
+           .format( ", ".join( pointDataType ) ) )
+
+    print( "\n" + "-----------------------------------------------"*2 + "\n" )
+ 
     # ------------------------------------------------- #
     # --- [4] make return dataset                   --- #
     # ------------------------------------------------- #
-    print( "[Done]" )
+    
     if   ( returnType.lower() == "list" ):
         return( [ cells, points, pointData, cellData, physNums ] )
         
@@ -87,5 +113,5 @@ def load__meshio( mshFile=None, elementType=None, returnType="dict", gmsh=None )
 # ========================================================= #
 
 if ( __name__=="__main__" ):
-    ret = load__meshio( mshFile="msh/model.msh", elementType="tetra" )
-    print( ret )
+    ret = load__meshio( mshFile="test/model.msh", elementType="tetra", gmsh_physical=False )
+    print( list( ret.keys() ) )

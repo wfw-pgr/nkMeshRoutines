@@ -61,12 +61,12 @@ def save__nastranFile( points=None, cells=None, matNums=None, outFile="nastran.b
 if ( __name__=="__main__" ):
 
     import nkMeshRoutines.load__meshio as lms
-    mshFile = "msh/model.msh"
-    ret     = lms.load__meshio( mshFile=mshFile, returnType="dict" )
+    mshFile = "test/model.msh"
+    ret     = lms.load__meshio( mshFile=mshFile, returnType="dict", gmsh_physical=False )
     points  = np.array( ret["points"] )
     cells   = np.array( ret["cells"]["tetra"] )
     physNum = np.array( ret["cellData"]["gmsh:physical"]["tetra"] )
-    save__nastranFile( points=points, cells=cells, matNums=physNum, outFile="msh/test.bdf" )
+    save__nastranFile( points=points, cells=cells, matNums=physNum, outFile="test/converted.bdf" )
 
 
     # ------------------------------------------------- #
