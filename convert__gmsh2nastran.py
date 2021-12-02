@@ -6,7 +6,7 @@ import numpy as np
 # ===  convert__gmsh2nastran                            === #
 # ========================================================= #
 
-def convert__gmsh2nastran( inpFile=None, outFile=None ):
+def convert__gmsh2nastran( inpFile=None, outFile=None, nodes_format=None ):
 
     # ------------------------------------------------- #
     # --- [1] Arguments                             --- #
@@ -28,7 +28,8 @@ def convert__gmsh2nastran( inpFile=None, outFile=None ):
     # --- [3] write nastran Data                    --- #
     # ------------------------------------------------- #
     import nkMeshRoutines.save__nastranFile as snf
-    snf.save__nastranFile( points=points, cells=cells, matNums=physNum, outFile=outFile )
+    snf.save__nastranFile( points=points, cells=cells, matNums=physNum, \
+                           outFile=outFile, nodes_format=nodes_format )
     return()
 
 

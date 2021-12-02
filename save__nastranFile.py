@@ -5,7 +5,7 @@ import numpy as np
 # ===  save__nastranFile                                === #
 # ========================================================= #
 
-def save__nastranFile( points=None, cells=None, matNums=None, outFile="nastran.bdf", index_plus_1=True ):
+def save__nastranFile( points=None, cells=None, matNums=None, outFile="nastran.bdf", index_plus_1=True, nodes_format=None ):
 
     # ------------------------------------------------- #
     # --- [1] Arguments                             --- #
@@ -15,6 +15,7 @@ def save__nastranFile( points=None, cells=None, matNums=None, outFile="nastran.b
     if ( type( points ) is list ): points  = np.array( points )
     if ( type( cells  ) is list ): cells   = np.array( cells  )
     if ( matNums        is None ): matNums = np.ones( (cells.shape[0],) )
+    if ( nodes_format   is None ): nodes_format = "%15.8e"
     
     # ------------------------------------------------- #
     # --- [2] Open / Begin Bulk statement           --- #
@@ -32,7 +33,7 @@ def save__nastranFile( points=None, cells=None, matNums=None, outFile="nastran.b
     point_nums = np.arange( 1, nPoints+1 )
     point_tags = np.zeros( (nPoints,) )
     points_    = np.concatenate( [point_card[:,None], point_nums[:,None], point_tags[:,None], points], axis=1 )
-    np.savetxt( f, points_, fmt=",".join( ["%s","%d","%d","%15.8e","%15.8e","%15.8e"] ) )
+    np.savetxt( f, points_, fmt=",".join( ["%s","%d","%d",nodes_format,nodes_format,nodes_format] ) )
     
     # ------------------------------------------------- #
     # --- [4] add CTETRA Card                       --- #
