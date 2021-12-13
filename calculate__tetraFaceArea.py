@@ -5,7 +5,7 @@ import numpy as np
 # ===  calculate face area of a tetrahedral element     === #
 # ========================================================= #
 
-def calculate__tetraFaceArea( elems=None, nodes=None ):
+def calculate__tetraFaceArea( elems=None, nodes=None, index_from_one=False ):
 
     # ------------------------------------------------- #
     # --- [1] Arguments                             --- #
@@ -21,10 +21,16 @@ def calculate__tetraFaceArea( elems=None, nodes=None ):
         print( "[calculate__tetraFaceArea.py] illegal nodes shape :: {0} ".format( nodes.shape ) )
 
     # ------------------------------------------------- #
+    # --- [2] index from 1 / 0                      --- #
+    # ------------------------------------------------- #
+    if ( index_from_one ):
+        elems[:,:] = elems[:,:] - 1
+        
+    # ------------------------------------------------- #
     # --- [2] calculate  in-radius of the element   --- #
     # ------------------------------------------------- #
-    nd0, nd1      = nodes[ elems[:,0]-1,:], nodes[ elems[:,1]-1,:]
-    nd2, nd3      = nodes[ elems[:,2]-1,:], nodes[ elems[:,3]-1,:]
+    nd0, nd1      = nodes[ elems[:,0],:], nodes[ elems[:,1],:]
+    nd2, nd3      = nodes[ elems[:,2],:], nodes[ elems[:,3],:]
     vc1, vc2      = nd1-nd0, nd2-nd0
     vc3, vc4      = nd1-nd3, nd2-nd3
     face1         = 0.5 * np.sqrt( np.sum( ( np.cross( vc3, vc4 ) )**2, axis=1 ) )

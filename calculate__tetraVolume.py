@@ -5,7 +5,7 @@ import numpy as np
 # ===  calculate tetrahedral mesh volume                === #
 # ========================================================= #
 
-def calculate__tetraVolume( elems=None, nodes=None ):
+def calculate__tetraVolume( elems=None, nodes=None, index_from_one=False ):
 
     # ------------------------------------------------- #
     # --- [1] Arguments                             --- #
@@ -19,19 +19,25 @@ def calculate__tetraVolume( elems=None, nodes=None ):
         print( "[calculate__tetraVolume.py] illegal elems shape :: {0} ".format( elems.shape ) )
     if ( nodes.shape[1] != 3 ):
         print( "[calculate__tetraVolume.py] illegal nodes shape :: {0} ".format( nodes.shape ) )
-    
+
     # ------------------------------------------------- #
-    # --- [2] calculate volume of the element       --- #
+    # --- [2] index from 1 / 0                      --- #
+    # ------------------------------------------------- #
+    if ( index_from_one ):
+        elems[:,:] = elems[:,:] - 1
+        
+    # ------------------------------------------------- #
+    # --- [3] calculate volume of the element       --- #
     # ------------------------------------------------- #
     onesixth      = 1.0 / 6.0
-    nd0, nd1      = nodes[ elems[:,0]-1,:], nodes[ elems[:,1]-1,:]
-    nd2, nd3      = nodes[ elems[:,2]-1,:], nodes[ elems[:,3]-1,:]
+    nd0, nd1      = nodes[ elems[:,0],:], nodes[ elems[:,1],:]
+    nd2, nd3      = nodes[ elems[:,2],:], nodes[ elems[:,3],:]
     vc1, vc2, vc3 = nd1-nd0, nd2-nd0, nd3-nd0
     matrix        = np.concatenate( [vc1[:,:,None],vc2[:,:,None],vc3[:,:,None]], axis=2 )
     volumes       = onesixth * np.linalg.det( matrix )
 
     # ------------------------------------------------- #
-    # --- [3] return                                --- #
+    # --- [4] return                                --- #
     # ------------------------------------------------- #
     return( volumes )
 

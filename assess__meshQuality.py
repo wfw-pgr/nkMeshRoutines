@@ -14,7 +14,7 @@ def assess__meshQuality( nodes=None, elems=None, inpFile=None, \
     if ( ( nodes is None ) or ( elems is None ) ):
         if ( inpFile is not None ):
             import nkMeshRoutines.load__nastranFile as inf
-            nodes, elems = inf.load__nastranFile( inpFile=inpFile )
+            nodes, elems = inf.load__nastranFile( inpFile=inpFile, index_from_zero=True )
         else:
             sys.exit( "[assess__meshQuality.py] nodes, elems = None, inpFile = None " )
     nElems = elems.shape[0]

@@ -5,7 +5,7 @@ import os, sys
 # ===  load nastran File                                === #
 # ========================================================= #
 
-def load__nastranFile( inpFile="msh/model.bdf", returnAll=False ):
+def load__nastranFile( inpFile="msh/model.bdf", returnAll=False, index_from_zero=True ):
 
     # ------------------------------------------------- #
     # --- [1] inpFile                               --- #
@@ -25,6 +25,8 @@ def load__nastranFile( inpFile="msh/model.bdf", returnAll=False ):
         if ( ( line.strip() )[0] == "$" ):
             continue
         if ( len( line.strip() ) == 0   ):
+            continue
+        if ( ( line.strip() )         == "BEGIN BULK" ):
             continue
         if ( ( line.strip() ).lower() == "enddata" ):
             break
@@ -55,6 +57,18 @@ def load__nastranFile( inpFile="msh/model.bdf", returnAll=False ):
     ctria3 = np.array( ctria3, dtype=np.int64 )
     ctetra = np.array( ctetra, dtype=np.int64 )
 
+    if ( ( index_from_zero ) and ( ctria3.size > 0 ) ):
+        if ( np.min(ctria3[:,2:]) != 1 ): 
+            print( "[load__nastranFile.py] index_from_zero == True, "\
+                   "but ctria3 begins from {0} [CAUTION] ".format( np.min(ctria3[:,2:]) ) )
+        ctria3[:,2:] = ctria3[:,2:] - 1
+        
+    if ( ( index_from_zero ) and ( ctetra.size > 0 ) ):
+        if ( np.min(ctetra[:,2:]) != 1 ): 
+            print( "[load__nastranFile.py] index_from_zero == True, "\
+                   "but ctetra begins from {0} [CAUTION] ".format( np.min(ctetra[:,2:]) ) )
+        ctetra[:,2:] = ctetra[:,2:] - 1
+    
     if ( returnAll ):
         ret    = { "grid":grid, "cbar":cbar, "ctria3":ctria3, "ctetra":ctetra }
     else:
@@ -69,7 +83,9 @@ def load__nastranFile( inpFile="msh/model.bdf", returnAll=False ):
 # ========================================================= #
 
 if ( __name__=="__main__" ):
-    
-    nodes, elems = load__nastranFile()
+
+    inpFile = "test/model.bdf"
+    nodes, elems = load__nastranFile( inpFile=inpFile, index_from_zero=True )
     print( " nodes :: {0}".format( nodes.shape ) )
     print( " elems :: {0}".format( elems.shape ) )
+    print( " min(elems), max(elems) :: {0}, {1}".format( np.min( elems[:,2:] ), np.max( elems[:,2:] ) ) )

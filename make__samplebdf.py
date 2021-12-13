@@ -52,13 +52,13 @@ if ( __name__=="__main__" ):
     # --- [3] Mesh settings                         --- #
     # ------------------------------------------------- #
     
-    meshFile = "test/mesh.conf"
-    physFile = "test/phys.conf"
-    import nkGmshRoutines.assign__meshsize as ams
-    meshes = ams.assign__meshsize( meshFile=meshFile, physFile=physFile )
+    # meshFile = "test/mesh.conf"
+    # physFile = "test/phys.conf"
+    # import nkGmshRoutines.assign__meshsize as ams
+    # meshes = ams.assign__meshsize( meshFile=meshFile, physFile=physFile )
     
-    # gmsh.option.setNumber( "Mesh.CharacteristicLengthMin", 0.1 )
-    # gmsh.option.setNumber( "Mesh.CharacteristicLengthMax", 0.1 )
+    gmsh.option.setNumber( "Mesh.CharacteristicLengthMin", 0.1 )
+    gmsh.option.setNumber( "Mesh.CharacteristicLengthMax", 0.1 )
     
 
     # ------------------------------------------------- #

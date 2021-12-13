@@ -5,7 +5,7 @@ import numpy as np
 # ===  calculate in-out radius of a tetrahedral element === #
 # ========================================================= #
 
-def calculate__tetraInOutRadius( elems=None, nodes=None ):
+def calculate__tetraInOutRadius( elems=None, nodes=None, index_from_one=False ):
 
     # ------------------------------------------------- #
     # --- [1] Arguments                             --- #
@@ -22,20 +22,26 @@ def calculate__tetraInOutRadius( elems=None, nodes=None ):
     nElems   = elems.shape[0]
 
     # ------------------------------------------------- #
-    # --- [2] calculate  in-radius of the element   --- #
+    # --- [2] index from 1 / 0                      --- #
+    # ------------------------------------------------- #
+    if ( index_from_one ):
+        elems[:,:] = elems[:,:] - 1
+    
+    # ------------------------------------------------- #
+    # --- [3] calculate  in-radius of the element   --- #
     # ------------------------------------------------- #
     import nkMeshRoutines.calculate__tetraVolume   as ctv
     import nkMeshRoutines.calculate__tetraFaceArea as tfa
-    volumes  = ctv.calculate__tetraVolume  ( elems=elems, nodes=nodes )
-    areas    = tfa.calculate__tetraFaceArea( elems=elems, nodes=nodes )
+    volumes  = ctv.calculate__tetraVolume  ( elems=elems, nodes=nodes, index_from_one=False )
+    areas    = tfa.calculate__tetraFaceArea( elems=elems, nodes=nodes, index_from_one=False )
     areas    = np.sum( areas, axis=1 )
     rinn     = 3.0 * volumes / areas
     
     # ------------------------------------------------- #
-    # --- [3] calculate out-radius of the element   --- #
+    # --- [4] calculate out-radius of the element   --- #
     # ------------------------------------------------- #
-    nd0, nd1      = nodes[ elems[:,0]-1,:], nodes[ elems[:,1]-1,:]
-    nd2, nd3      = nodes[ elems[:,2]-1,:], nodes[ elems[:,3]-1,:]
+    nd0, nd1      = nodes[ elems[:,0],:], nodes[ elems[:,1],:]
+    nd2, nd3      = nodes[ elems[:,2],:], nodes[ elems[:,3],:]
     vc1, vc2, vc3 = nd0-nd1, nd0-nd2, nd2-nd3
     matrix        = np.concatenate( [vc1[:,None,:],vc2[:,None,:],vc3[:,None,:]], axis=1 )
     norm_sub1     = np.sum(nd0**2,axis=1) - np.sum(nd1**2,axis=1)
@@ -71,7 +77,7 @@ if ( __name__=="__main__" ):
     nodes, elems = lnf.load__nastranFile( inpFile=inpFile )
     elems        = np.copy( elems[:,2:] )
     
-    rinn,rout    = calculate__tetraInOutRadius( elems=elems, nodes=nodes )
+    rinn,rout    = calculate__tetraInOutRadius( elems=elems, nodes=nodes, index_from_one=False )
     aspect       = 3.0 * rinn / rout
     print( np.min( aspect ), np.max( aspect ) )
 
