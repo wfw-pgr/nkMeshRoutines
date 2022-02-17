@@ -82,18 +82,15 @@ def load__meshio( mshFile=None, elementType=None, returnType="dict" ):
     print( "[load__meshio.py] elementType          ::   {0}".format( elementType     ) )
     print( "[load__meshio.py] loaded points        ::   {0}".format( points.shape[0] ) )
     print( "[load__meshio.py] loaded cells         ::   {0}".format( nCells          ) )
+    print( "[load__meshio.py] loaded cellType      :: [ {0} ]".format( ", ".join( cellType      ) ) )
+    print( "[load__meshio.py] loaded cellDataType  :: [ {0} ]".format( ", ".join( cellDataType  ) ) )
+    print( "[load__meshio.py] loaded pointDataType :: [ {0} ]".format( ", ".join( pointDataType ) ) )
     if ( physNums is None ):
         print( "[load__meshio.py] No physical Numbers  ::   {0}".format( physNums        ) )
     else:
         print( "[load__meshio.py] physNums'shape       ::   {0}".format( physNums.shape  ) )
         print( "[load__meshio.py] physNums             ::   {0}".format( set( physNums ) ) )
         
-    print( "[load__meshio.py] loaded cellType      :: [ {0} ]"\
-           .format( ", ".join( cellType      ) ) )
-    print( "[load__meshio.py] loaded cellDataType  :: [ {0} ]"\
-           .format( ", ".join( cellDataType  ) ) )
-    print( "[load__meshio.py] loaded pointDataType :: [ {0} ]"\
-           .format( ", ".join( pointDataType ) ) )
 
     print( "\n" + "-----------------------------------------------"*2 + "\n" )
  
