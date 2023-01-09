@@ -31,7 +31,8 @@ import nkUtilities.load__constants as lcn
 # ===  convert__gmsh2phits                              === #
 # ========================================================= #
 
-def convert__gmsh2phits( inpFile=None, outFile=None, density=None, densityFile=None ):
+def convert__gmsh2phits( inpFile=None, outFile=None, density=None, densityFile=None, \
+                         index_plus_1=True ):
 
     x_, y_, z_ = 0, 1, 2
     
@@ -53,6 +54,8 @@ def convert__gmsh2phits( inpFile=None, outFile=None, density=None, densityFile=N
     print( "[save__nastranFile.py] loading gmsh FIle :: {0}".format( inpFile ), end=""  )
     import nkMeshRoutines.load__meshio as lms
     ret      = lms.load__meshio( mshFile=inpFile, returnType="dict", elementType="tetra" )
+    if ( index_plus_1 ):
+        ret["cells"] = ret["cells"] + 1
     print( "     [Done]" )
 
     # ------------------------------------------------- #
