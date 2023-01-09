@@ -4,28 +4,33 @@ import numpy as np
 # ===  inquire__nodesInPhysNum.py                       === #
 # ========================================================= #
 
-def inquire__nodesInPhysNum( mshFile=None, elementType="tetra" ):
+def inquire__nodesInPhysNum( nodes=None, elems=None, physNums=None, \
+                             mshFile=None, elementType="tetra" ):
     
     # ------------------------------------------------- #
     # --- [1] Arguments                             --- #
     # ------------------------------------------------- #
-    if ( mshFile is None ): sys.exit( "[inquire__nodesInPhysNum.py] mshFile == ???" )
+    if ( ( nodes is None ) or ( elems is None ) or ( physNums is None ) ):
+        print( "[inquire__sharingNodes.py] nodes / elems / physNums is None." )
+        print( "[inquire__sharingNodes.py] try to load mshFile..." )
+        if ( mshFile is not None ):
+            import nkMeshRoutines.load__meshio as lms
+            meshdict  = lms.load__meshio( mshFile=mshFile, elementType=elementType, \
+                                          returnType="dict" )
+            nodes     = meshdict["points"]
+            elems     = meshdict["cells"]
+            physNums  = meshdict["physNums"]
+            print( "[inquire__nodesInPhysNum.py] #. of Nodes    :: {0}"\
+                   .format(    nodes.shape[0] ) )
+            print( "[inquire__nodesInPhysNum.py] #. of Elems    :: {0}"\
+                   .format(    elems.shape[0] ) )
+            print( "[inquire__nodesInPhysNum.py] #. of physNums :: {0}"\
+                   .format( physNums.shape[0] ) )
+        else:
+            sys.exit( "[inquire__sharingNodes.py] mshFile == ???" )
     
     # ------------------------------------------------- #
-    # --- [2] load mesh from MeshIO                 --- #
-    # ------------------------------------------------- #
-    import nkMeshRoutines.load__meshio as lms
-    meshdict  = lms.load__meshio( mshFile=mshFile, elementType=elementType, \
-                                  returnType="dict" )
-    nodes     = meshdict["points"]
-    elems     = meshdict["cells"]
-    physNums  = meshdict["physNums"]
-    print( "[inquire__nodesInPhysNum.py] #. of Nodes    :: {0}".format(    nodes.shape[0] ) )
-    print( "[inquire__nodesInPhysNum.py] #. of Elems    :: {0}".format(    elems.shape[0] ) )
-    print( "[inquire__nodesInPhysNum.py] #. of physNums :: {0}".format( physNums.shape[0] ) )
-
-    # ------------------------------------------------- #
-    # --- [3] inquire physNum                       --- #
+    # --- [2] inquire physNum                       --- #
     # ------------------------------------------------- #
     physNum_set  = set( physNums )
     nPhysNums    = len( physNum_set )

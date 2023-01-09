@@ -22,6 +22,9 @@ def load__meshio( mshFile=None, elementType=None, returnType="dict" ):
         sys.exit( "[load__meshio.py] mshFile        == ???" )
     extension = ( mshFile.split( "." ) )[-1]
 
+    if ( elementType is None ):
+        print( "[load__meshio.py] elementType is None.... return all element's Data.... " )
+
     # ------------------------------------------------- #
     # --- [2] bfd by Gmsh exception                 --- #
     # ------------------------------------------------- #
