@@ -120,7 +120,14 @@ def convert__gmsh2phits( inpFile=None, outFile=None, density=None, densityFile=N
     MAT1_zeroData1  = np.zeros( (nMAT1,3) )
     MAT1_zeroData2  = np.zeros( (nMAT1,3) )
     keys            = [ str(num) for num in MAT1_MIDs ]
+    for key in keys:
+        if ( key in density ):
+            pass
+        else:
+            cpr.cprint( "[convert__gmsh2phits.py] Cannot Find {} in density dict.... [ERROR]".format( key) )
+            sys.exit()
     MAT1_density    = np.array( [ density[key] for key in keys ] )
+    
     MAT1_Data       = np.concatenate( [ MAT1_cards[:,None], MAT1_MIDs[:,None], \
                                         MAT1_zeroData1, MAT1_returns[:,None], \
                                         MAT1_continues[:,None], MAT1_density[:,None], \
