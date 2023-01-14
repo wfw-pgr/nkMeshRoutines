@@ -31,7 +31,10 @@ def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, rep
             else:
                 cellData    = {  **cellData, **( mesh_dict["cellData"]  ) }
                 pointData   = { **pointData, **( mesh_dict["pointData"] ) }
-                
+    if ( outFile is None ):
+        ext     = os.path.splitext( mshFile )
+        outFile = mshFile.replace( ext, ".vtu" )
+        
     # ------------------------------------------------- #
     # --- [2] load csv file                         --- #
     # ------------------------------------------------- #
@@ -67,8 +70,7 @@ def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, rep
             cellData[key] = np.transpose( cellData[key] )
 
     wmesh = meshio.Mesh( points, cells, cell_data=cellData, point_data=pointData )
-    if ( outFile is not None ):
-        wmesh.write( outFile )
+    wmesh.write( outFile )
     return( wmesh )
     
     
