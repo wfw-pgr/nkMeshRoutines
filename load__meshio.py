@@ -19,14 +19,16 @@ def load__meshio( mshFile=None, elementType=None, returnType="dict" ):
     # --- [1] Arguments                             --- #
     # ------------------------------------------------- #
     if ( mshFile        is None ):
-        sys.exit( "[load__meshio.py] mshFile        == ???" )
+        sys.exit( "\033[31m" + "[load__meshio.py] mshFile        == ???    [ERROR]" + "\033[0m" )
+        
     extension = ( mshFile.split( "." ) )[-1]
 
     if ( elementType is None ):
-        print( "[load__meshio.py] elementType is None.... return all element's Data.... " )
+        print( "\033[31m" + "[load__meshio.py] elementType is None.... return all element's Data.... " + "\033[0m" )
+        
 
     # ------------------------------------------------- #
-    # --- [2] bfd by Gmsh exception                 --- #
+    # --- [2] bdf by Gmsh exception                 --- #
     # ------------------------------------------------- #
     contents = None
     if ( extension.lower() == "bdf" ):
