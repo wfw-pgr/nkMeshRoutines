@@ -11,7 +11,7 @@ import nkUtilities.load__pointFile as lpf
 # ========================================================= #
 
 def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, replaceData=True, \
-                         mshFile=None, cellDataFile=None, pointDataFile=None, outFile=None, \
+                         mshFile=None, cellDataFiles=None, pointDataFiles=None, outFile=None, \
                          elementType="tetra" ):
 
     # ------------------------------------------------- #
@@ -38,27 +38,29 @@ def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, rep
     # ------------------------------------------------- #
     # --- [2] load csv file                         --- #
     # ------------------------------------------------- #
-    if ( cellDataFile is not None ):
-        ext = os.path.splitext( cellDataFile )[1]
-        if ( ext.lower() == ".csv" ):
-            csvData_l  = pd.read_csv( cellDataFile )
-            columns    = ( csvData_l.columns ).to_list()
-            cellData_l = { clm:csvData_l[clm].to_numpy() for clm in columns }
-            cellData   = { **cellData, **cellData_l }
-        else:
-            cellData_l = lpf.load__pointFile( inpFile=inpFile, returnType="dict" )
-            cellData   = { **cellData, **cellData_l }
+    if ( cellDataFiles is not None ):
+        for cellDataFile in cellDataFiles:
+            ext = os.path.splitext( cellDataFile )[1]
+            if ( ext.lower() == ".csv" ):
+                csvData_l  = pd.read_csv( cellDataFile )
+                columns    = ( csvData_l.columns ).to_list()
+                cellData_l = { clm:csvData_l[clm].to_numpy() for clm in columns }
+                cellData   = { **cellData, **cellData_l }
+            else:
+                cellData_l = lpf.load__pointFile( inpFile=inpFile, returnType="dict" )
+                cellData   = { **cellData, **cellData_l }
 
-    if ( pointDataFile is not None ):
-        ext = os.path.splitext( pointDataFile )[1]
-        if ( ext.lower() == ".csv" ):
-            csvData_l   = pd.read_csv( pointDataFile )
-            columns     = ( csvData_l.columns ).to_list()
-            pointData_l = { clm:csvData_l[clm].to_numpy() for clm in columns }
-            pointData   = { **pointData, **pointData_l }
-        else:
-            pointData_l = lpf.load__pointFile( inpFile=inpFile, returnType="dict" )
-            pointData   = { **pointData, **pointData_l }
+    if ( pointDataFiles is not None ):
+        for pointDataFile in pointDataFiles:
+            ext = os.path.splitext( pointDataFile )[1]
+            if ( ext.lower() == ".csv" ):
+                csvData_l   = pd.read_csv( pointDataFile )
+                columns     = ( csvData_l.columns ).to_list()
+                pointData_l = { clm:csvData_l[clm].to_numpy() for clm in columns }
+                pointData   = { **pointData, **pointData_l }
+            else:
+                pointData_l = lpf.load__pointFile( inpFile=inpFile, returnType="dict" )
+                pointData   = { **pointData, **pointData_l }
             
     # ------------------------------------------------- #
     # --- [3] save mesh                             --- #
@@ -79,8 +81,8 @@ def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, rep
 # ========================================================= #
 
 if ( __name__=="__main__" ):
-    mshFile       = "msh/model.bdf"
-    cellDataFile  = "dat/cellData.csv"
-    outFile       = "msh/output.vtu"
-    convert__withMeshIO( mshFile=mshFile, cellDataFile=cellDataFile, outFile=outFile )
+    mshFile        = "msh/model.bdf"
+    cellDataFiles  = [ "dat/cellData.csv" ]
+    outFile        = "msh/output.vtu"
+    convert__withMeshIO( mshFile=mshFile, cellDataFiles=cellDataFiles, outFile=outFile )
     
