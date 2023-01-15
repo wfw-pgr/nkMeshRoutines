@@ -38,6 +38,7 @@ def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, rep
     # ------------------------------------------------- #
     # --- [2] load csv file                         --- #
     # ------------------------------------------------- #
+    print( "\n" )
     if ( cellDataFiles is not None ):
         for ik,cellDataFile in enumerate(cellDataFiles):
             ext = os.path.splitext( cellDataFile )[1]
@@ -78,19 +79,20 @@ def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, rep
             cellData[key] = np.transpose( cellData[key] )
 
     wmesh = meshio.Mesh( points, cells, cell_data=cellData, point_data=pointData )
+    print()
     print( "[convert__withMeshIO.py]      saving pointDataFile : {}".format( outFile ), end="" )
     wmesh.write( outFile )
-    print( "     [Done]" )
+    print( "     [Done]" + "\n" )
     return( wmesh )
     
-    
+
 # ========================================================= #
 # ===   Execution of Pragram                            === #
 # ========================================================= #
 
 if ( __name__=="__main__" ):
-    mshFile        = "msh/model.bdf"
-    cellDataFiles  = [ "dat/cellData.csv" ]
-    outFile        = "msh/output.vtu"
+    mshFile        =   "test/model__convert_withMeshIO.msh"
+    cellDataFiles  = [ "test/cData__convert_withMeshIO.csv" ]
+    outFile        =   "test/output__convert_withMeshIO.vtu"
     convert__withMeshIO( mshFile=mshFile, cellDataFiles=cellDataFiles, outFile=outFile )
     
