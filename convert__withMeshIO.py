@@ -39,10 +39,10 @@ def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, rep
     # --- [2] load csv file                         --- #
     # ------------------------------------------------- #
     if ( cellDataFiles is not None ):
-        for cellDataFile in cellDataFiles:
+        for ik,cellDataFile in enumerate(cellDataFiles):
             ext = os.path.splitext( cellDataFile )[1]
-            print( "[convert__withMeshIO.py]  #{0}. loading cellDataFile : {}"\
-                   .format( cellDataFile ), end="" )
+            print( "[convert__withMeshIO.py]  #{0}. loading cellDataFile : {1}"\
+                   .format( ik+1, cellDataFile ), end="" )
             if ( ext.lower() == ".csv" ):
                 csvData_l  = pd.read_csv( cellDataFile )
                 columns    = ( csvData_l.columns ).to_list()
@@ -54,10 +54,10 @@ def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, rep
             print( "   [Done]" )
             
     if ( pointDataFiles is not None ):
-        for pointDataFile in pointDataFiles:
+        for ik,pointDataFile in enumerate(pointDataFiles):
             ext = os.path.splitext( pointDataFile )[1]
-            print( "[convert__withMeshIO.py]  #{0}. loading pointDataFile : {}"\
-                   .format( cellDataFile ), end="" )
+            print( "[convert__withMeshIO.py]  #{0}. loading pointDataFile : {1}"\
+                   .format( ik+1, pointDataFile ), end="" )
             if ( ext.lower() == ".csv" ):
                 csvData_l   = pd.read_csv( pointDataFile )
                 columns     = ( csvData_l.columns ).to_list()
