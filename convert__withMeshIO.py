@@ -41,6 +41,8 @@ def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, rep
     if ( cellDataFiles is not None ):
         for cellDataFile in cellDataFiles:
             ext = os.path.splitext( cellDataFile )[1]
+            print( "[convert__withMeshIO.py]  #{0}. loading cellDataFile : {}"\
+                   .format( cellDataFile ), end="" )
             if ( ext.lower() == ".csv" ):
                 csvData_l  = pd.read_csv( cellDataFile )
                 columns    = ( csvData_l.columns ).to_list()
@@ -49,10 +51,13 @@ def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, rep
             else:
                 cellData_l = lpf.load__pointFile( inpFile=inpFile, returnType="dict" )
                 cellData   = { **cellData, **cellData_l }
-
+            print( "   [Done]" )
+            
     if ( pointDataFiles is not None ):
         for pointDataFile in pointDataFiles:
             ext = os.path.splitext( pointDataFile )[1]
+            print( "[convert__withMeshIO.py]  #{0}. loading pointDataFile : {}"\
+                   .format( cellDataFile ), end="" )
             if ( ext.lower() == ".csv" ):
                 csvData_l   = pd.read_csv( pointDataFile )
                 columns     = ( csvData_l.columns ).to_list()
@@ -61,6 +66,7 @@ def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, rep
             else:
                 pointData_l = lpf.load__pointFile( inpFile=inpFile, returnType="dict" )
                 pointData   = { **pointData, **pointData_l }
+            print( "   [Done]" )
             
     # ------------------------------------------------- #
     # --- [3] save mesh                             --- #
@@ -72,7 +78,9 @@ def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, rep
             cellData[key] = np.transpose( cellData[key] )
 
     wmesh = meshio.Mesh( points, cells, cell_data=cellData, point_data=pointData )
+    print( "[convert__withMeshIO.py]      saving pointDataFile : {}".format( outFile ), end="" )
     wmesh.write( outFile )
+    print( "     [Done]" )
     return( wmesh )
     
     
