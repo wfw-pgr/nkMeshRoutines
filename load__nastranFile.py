@@ -72,7 +72,7 @@ def load__nastranFile( inpFile="msh/model.bdf", returnAll=False, index_from_zero
     if ( returnAll ):
         ret    = { "grid":grid, "cbar":cbar, "ctria3":ctria3, "ctetra":ctetra }
     else:
-        nodes  = np.array( grid[:,2:], dtype=np.float )
+        nodes  = np.array( grid[:,2:], dtype=np.float64 )
         elems  = np.copy ( ctetra )
         ret    = ( nodes, elems )
     return( ret )
