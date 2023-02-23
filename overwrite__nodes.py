@@ -6,7 +6,7 @@ import numpy as np
 # ===  overwrite__nodes.py                               === #
 # ========================================================= #
 
-def overwrite__nodes( nodes=None, mshFile=None, outFile=None ):
+def overwrite__nodes( nodes=None, mshFile=None, outFile=None, elementType="triangle" ):
 
     # element number :: [ 0 ~ nElems-1 ]  <<<  [CAUTION] element Number begins from 0
 
@@ -24,16 +24,28 @@ def overwrite__nodes( nodes=None, mshFile=None, outFile=None ):
     # ------------------------------------------------- #
     # --- [2] load mesh FIle                        --- #
     # ------------------------------------------------- #
-    rmesh         = meshio.read( mshFile )
-    rmesh.points  = np.copy( nodes )
-    if ( not( "gmsh:physical" in rmesh.cell_data ) ):
-        print( "[overwrite__nodes.py] cannot find gmsh:physical..... create dummy. " )
-        if ( "gmsh:geometrical" in rmesh.cell_data ):
-            print( "[overwrite__nodes.py] use gmsh:geometrical " )
-            rmesh.cell_data["gmsh:physical"] = rmesh.cell_data["gmsh:geometrical"]
-    meshio.write( outFile, rmesh, file_format="gmsh" )
-    print( "\n"+"[overwrite__node.py] output File :: {}".format( outFile ) + "\n" )
+    elementType = "triangle"
+    import nkMeshRoutines.load__meshio as mio
+    rmesh       = mio.load__meshio( mshFile=mshFile, elementType=elementType )
+    nodes       = rmesh["points"]
+    elems       = rmesh["cells"]
+    cells       = { "triangle": elems }
+    wmesh       = meshio.Mesh( nodes, cells )
+    wmesh.write( outFile, file_format="gmsh" )
+    print( "\n" + "[overwrite__nodes.py] outputFile :: {}".format( outFile ) + "\n" )
     return( outFile )
+
+    # rmesh         = meshio.read( mshFile )
+    # rmesh.points  = np.copy( nodes )
+    # # rmesh.cells   = no.copy(  )
+    # if ( not( "gmsh:physical" in rmesh.cell_data ) ):
+    #     print( "[overwrite__nodes.py] cannot find gmsh:physical..... create dummy. " )
+    #     if ( "gmsh:geometrical" in rmesh.cell_data ):
+    #         print( "[overwrite__nodes.py] use gmsh:geometrical " )
+    #         rmesh.cell_data["gmsh:physical"] = rmesh.cell_data["gmsh:geometrical"]
+    # meshio.write( outFile, rmesh, file_format="gmsh" )
+    # print( "\n"+"[overwrite__node.py] output File :: {}".format( outFile ) + "\n" )
+    # return( outFile )
     
 # ========================================================= #
 # ===   実行部                                          === #
