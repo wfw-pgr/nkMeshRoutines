@@ -146,6 +146,7 @@ if ( __name__=="__main__" ):
     ret = load__meshio( mshFile="test/model.msh"    , elementType="tetra", returnType="dict" )
     ret = load__meshio( mshFile="test/model.bdf"    , elementType="tetra", returnType="dict" )
     ret = load__meshio( mshFile="test/converted.bdf", elementType="tetra", returnType="dict" )
+    ret = load__meshio( mshFile="test/out.vtu"      , elementType="tetra", returnType="dict" )
 
 
     # ret = load__meshio( mshFile="test/model.msh"    , elementType="tetra", returnType="dict" )

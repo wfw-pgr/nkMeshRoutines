@@ -10,7 +10,7 @@ import nkUtilities.load__pointFile as lpf
 # ===  convert__withMeshIO                              === #
 # ========================================================= #
 
-def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, replaceData=True, \
+def convert__withMeshIO( points=None, cells=None, cellData={}, pointData={}, replaceData=False, \
                          mshFile=None, cellDataFiles=None, pointDataFiles=None, outFile=None, \
                          elementType="tetra" ):
 
