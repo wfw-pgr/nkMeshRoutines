@@ -24,11 +24,14 @@ def calculate__volumeIntegral( inpFile=None, target=None, physNum=None, \
     nodes    = rmesh["points"]
     cellData = rmesh["cellData"]
     if   ( target is None ):
-        print( "[calculate__volumeIntegral.py] cannot find target (:{0}) in {1}... [ERROR] "\
-               .format( target, inpFile ) )
+        print( "[calculate__volumeIntegral.py] target is None... [ERROR] " )
         sys.exit()
     elif ( target in cellData ):
         targetD = cellData[target]
+    else:
+        print( "[calculate__volumeIntegral.py] cannot find target (:{0}) in {1}... [ERROR] "\
+               .format( target, inpFile ) )
+        sys.exit()
     
     # ------------------------------------------------- #
     # --- [3] calculate volume of elements          --- #
